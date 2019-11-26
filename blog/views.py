@@ -10,6 +10,7 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    category = Category.objects.all(),
     comments = post.comments.filter(active=True)
     new_comment = None
     # Comment posted
@@ -44,6 +45,20 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
+
+def post_category(request):
+    if request.method == 'POST':
+        form = Post_form(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+
+            for k in form.cleaned_data['category']:
+                selection = Category.objects.get(pk=k)
+                post.category.add(selection)
+
+            return redirect({'form':form})
 
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -106,19 +121,7 @@ def home(request):
         form = NameForm(None)    
         return render(request, 'home.html', {'form':form}) 
 
-def post_category(request):
-    if request.method == 'POST':
-        form = Post_form(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
 
-            for k in form.cleaned_data['category']:
-                selection = Category.objects.get(pk=k)
-                post.category.add(selection)
-
-            return redirect('home:home')
     
 
 

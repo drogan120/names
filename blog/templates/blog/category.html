@@ -1,0 +1,30 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="col-md-8 card mb-4  mt-3 ">
+    <div class="card-body">
+        <!-- comments -->
+        <h2>{{ categories.count }} categorys</h2>
+        {% if categories %}
+          <ul>
+          {% for category in categories %}
+            <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
+          {% endfor %}
+          </ul> 
+        {% else %}
+          <p>There are no posts.</p>
+        {% endif %}
+
+        {% for comment in comments %}
+        <div class="categories" style="padding: 10px;">
+          <p class="font-weight-bold">
+            {{ comment.name }}
+            <span class=" text-muted font-weight-normal">
+              {{ comment.created_on }}
+            </span>
+          </p>
+          {{ comment.body | linebreaks }}
+        </div>
+    <div>
+</div>
+        {% endfor %}
+        {% endfor %}

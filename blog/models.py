@@ -5,13 +5,12 @@ from django.utils import timezone
 
 class Category(models.Model):
     categories = (
-        ('1', 'red'),
-        ('2', 'blue'),
-        ('3', 'black')
+        ('1', 'crime'),
+        ('2', 'buzz'),
+        ('3', 'sports')
     )
     title = models.CharField(max_length=50, blank=True, choices=categories)
     
-
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
