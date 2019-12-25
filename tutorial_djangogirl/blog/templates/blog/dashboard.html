@@ -1,0 +1,52 @@
+{% extends 'blog/base.html' %}
+
+{% block body %}
+<div class="card card-body">
+    <div class="card">
+        <div class="card-header text-center">
+            Dashboard
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            Articles
+                        </div>
+                        <div class="card-body text-center">
+                            {{ count_published_article }} Published Article | 2 Unpublished Article
+                            <button class="btn btn-block btn-dark mt-3">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            Tags
+                        </div>
+                        <div class="card-body text-center">
+                            Total 5 Tag
+                            <button class="btn btn-block btn-dark mt-3">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            Users
+                        </div>
+                        <div class="card-body text-center">
+                            Total 12 Registered User
+                            <button class="btn btn-block btn-dark mt-3">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

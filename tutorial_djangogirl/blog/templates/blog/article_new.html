@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+
+{% block body %}
+
+<div class="card card-body">
+    <div class="card">
+        <div class="card-header text-center">
+            New Article
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_title">Tags</label>
+                    {{ form.tags }}
+                    <span class="text-danger">{{ form.errors.tags }}</span>
+                </div>
+                <div class="form-group">
+                    <label for="id_title">Title</label>
+                    {{ form.title }}
+                    <span class="text-danger">{{ form.errors.title }}</span>
+                </div>
+                <div class="form-group">
+                    <label for="id_text">Text</label>
+                    {{ form.text }}
+                </div>
+                <div class="form-group">
+                    <label for="id_text">Published Date</label>
+                    {{ form.published_date }}
+                </div>
+                <button class="btn btn-dark" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('.tags').select2({
+            tags: true
+        });
+    });
+</script>
+{% endblock %}
