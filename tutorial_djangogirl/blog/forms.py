@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Article, Comment
+from .models import Article, Comment, Tag
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -14,12 +14,11 @@ class CommentForm(forms.ModelForm):
         }
 
 class ArticleForm(forms.ModelForm):
-    tagsChoice = [
-        ('HTML', 'HTML'),
-        ('Python', 'Python'),
-        ('PHP', 'PHP'),
-        ('Javascript', 'Javascript'),
-    ]
+    choices = Tag.objects.all()
+    tagsChoice = []
+    for choice in choices:
+        tagsChoice.append((choice.id, choice.text))
+    
 
     tags = forms.MultipleChoiceField(
         required=False,

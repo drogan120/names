@@ -1,27 +1,37 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ArticleForm, CommentForm
-from .models import Article, Tag, Tag_link, Comment
+from .models import Article, Tag, Comment
 from django.utils import timezone
+from django.db.models import Count
 
 
 def indexView(request):
-    return render(request, 'blog/base.html')
-
-def dashboard(request):
+    articles = Article.objects.all()
+    title = request.GET.get('title')
+    tag = request.GET.get('tag')
+    if title:
+        articles = articles.filter(title__contains=title)
+    if tag:
+        articles = articles.filter(tag__text=tag)
     context = {
-        'count_published_article': Article.objects.count()
+        'articles': articles,  
+        'tags': Tag.objects.annotate(num_article = Count('article')),
+        'colors': ['danger', 'dark', 'success', 'warning', 'primary']
     }
-    return render(request, 'blog/dashboard.html', context)
-    
+    return render(request, 'blog/index.html', context)
+
 
 def article_list(request):
     articles = Article.objects.all()
-    if request.GET.get('tag'):
-        print(request.GET.get('tag'))
-        articles.filter(title__exact="asd")
+    title = request.GET.get('title')
+    tag = request.GET.get('tag')
+    if title:
+        articles = articles.filter(title__contains=title)
+    if tag:
+        articles = articles.filter(tag__text=tag)
     context = {
         'articles': articles,  
-        'tags': Tag.objects.all(),
+        'tags': Tag.objects.annotate(num_article = Count('article')),
         'colors': ['danger', 'dark', 'success', 'warning', 'primary']
     }
     return render(request, 'blog/article_list.html', context)
@@ -57,17 +67,14 @@ def article_new(request):
             article.title = form.cleaned_data['title']    
             article.text = form.cleaned_data['text']
             article.published_date = form.cleaned_data['published_date']
-            article.save()
             tagInput = form.cleaned_data['tags']
+            article.save()
             for tag in tagInput:
-                objTag = Tag.objects.get(text=tag)
-                Tag_link.objects.create(tag=objTag, article=article)
+                article.tag.add(tag)
 
-                
-            # return redirect('article_list')
+            return redirect('article_list')
     context = {
         'form': form,
-        'tags': tags
     }
     
     return render(request, 'blog/article_new.html', context) 
@@ -76,7 +83,6 @@ def article_edit(request, pk):
     article = get_object_or_404(Article, pk=pk)
     form = ArticleForm(request.POST or None, instance=article)
     tags = Tag.objects.all()
-
 
     if form.is_valid():
         article = Article()
@@ -89,7 +95,6 @@ def article_edit(request, pk):
         return redirect('article_list')
     context = {
         'form': form,
-        'tags': tags
     }
     
     return render(request, 'blog/article_edit.html', context) 

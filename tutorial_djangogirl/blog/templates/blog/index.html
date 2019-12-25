@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+{% block body %}
+
+<div class="card card-body">
+    <div class="card">
+        <div class="card-header text-center">
+            List Article
+            {% if user.is_authenticated %}
+            <span class="float-right"><a href="{% url 'article_new' %}" class="btn btn-sm btn-outline-dark">New Article</a></span> 
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <div class="filter-area mb-2">
+                <div class="row justify-content-end">
+                    <div class="col-md-4">
+                        <form action="#" method="get">
+                            <input type="text" class="form-control-inline" name="title" placeholder="search title">
+                            <input class="form-control-inline" type="submit" value="Search">
+                        </form>
+                    </div>
+                </div>
+                <div class="tag">
+                    {% for tag in tags %}
+                    <a href="?tag={{ tag.text }}"><span class="badge badge-{{ colors|random }}">{{ tag.text }} {{ tag.num_article }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% for article in articles %}
+            <div class="card card-body">
+                <h4>{{ article.title }}</h4>
+                <a href="{% url 'article_detail' slug=article.slug %}">See Detail</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

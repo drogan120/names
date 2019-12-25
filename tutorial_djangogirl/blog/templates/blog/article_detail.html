@@ -27,12 +27,16 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% if user.is_authenticated %}
             <form method='POST'>
                 {% csrf_token %}
                 <label for="id_text">Leave a Comment</label>
                 {{ form.text }}
                 <input class="btn btn-dark btn-block mt-2" type="submit" value="leave a comment">
             </form>
+            {% else %}
+            <p class="text-center">Login for leave comment.</p>
+            {% endif %}
         </div>
     </div>
 </div>

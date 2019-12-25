@@ -3,11 +3,17 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.text import slugify
 
+class Tag(models.Model):
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text
 
 class Article(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, null=False)
     slug = models.SlugField(blank=True, editable=False)
+    tag = models.ManyToManyField(Tag)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
@@ -36,12 +42,4 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
-class Tag(models.Model):
-    text = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.text
-
-class Tag_link(models.Model):
-    article = models.ForeignKey('blog.Article', on_delete=models.CASCADE)
-    tag = models.ForeignKey('blog.Tag', on_delete=models.CASCADE)
